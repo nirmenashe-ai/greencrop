@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import { Plus, Trash2, UserCog, Loader2, Eye, EyeOff, ShieldAlert } from 'lucide-react'
-import { supabaseAdmin, isAdminConfigured } from '../../lib/supabase'
+import { Plus, Trash2, UserCog, Loader2, Eye, EyeOff } from 'lucide-react'
+import { supabase, SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/supabase'
 import Modal from '../../components/common/Modal'
 import ConfirmDialog from '../../components/common/ConfirmDialog'
 import StatusMessage from '../../components/common/StatusMessage'
@@ -81,9 +81,11 @@ export default function UsersPage() {
 
   const load = useCallback(async () => {
     setLoading(true)
-    if (!isAdminConfigured) { setLoading(false); return }
-    const { data } = await supabaseAdmin.auth.admin.listUsers()
-    setUsers(data?.users || [])
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false })
+    setUsers(data || [])
     setLoading(false)
   }, [])
 
@@ -93,12 +95,18 @@ export default function UsersPage() {
     setSaving(true)
     setFormError('')
     try {
-      const { error } = await supabaseAdmin.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       })
-      if (error) throw error
+      const body = await res.json()
+      if (!res.ok) {
+        throw new Error(body.msg || body.error_description || body.error || 'שגיאה ביצירת משתמש')
+      }
       await load()
       setModal(false)
     } catch (err) {
@@ -111,30 +119,12 @@ export default function UsersPage() {
   const handleDelete = async () => {
     setDeleting(true)
     try {
-      await supabaseAdmin.auth.admin.deleteUser(confirm.id)
+      await supabase.from('profiles').delete().eq('id', confirm.id)
       await load()
       setConfirm({ open: false, id: null, email: '' })
     } finally {
       setDeleting(false)
     }
-  }
-
-  if (!isAdminConfigured) {
-    return (
-      <div className="space-y-5">
-        <div className="flex items-center gap-2">
-          <UserCog size={20} className="text-green-600" />
-          <h2 className="text-lg font-bold text-gray-800">ניהול משתמשים</h2>
-        </div>
-        <div className="bg-white rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
-          <ShieldAlert size={40} className="mx-auto mb-3 text-amber-500" />
-          <p className="text-sm font-semibold text-amber-800">נדרש מפתח Service Role</p>
-          <p className="text-xs text-amber-700 mt-2 max-w-sm mx-auto">
-            הוסף את המשתנה <code className="bg-amber-100 px-1 rounded">VITE_SUPABASE_SERVICE_ROLE_KEY</code> להגדרות הסביבה ב-Railway
-          </p>
-        </div>
-      </div>
-    )
   }
 
   return (
@@ -167,7 +157,6 @@ export default function UsersPage() {
               <tr className="border-b border-gray-100 bg-gray-50">
                 <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">אימייל</th>
                 <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">נוצר</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">כניסה אחרונה</th>
                 <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">פעולות</th>
               </tr>
             </thead>
@@ -187,11 +176,6 @@ export default function UsersPage() {
                   <td className="px-4 py-3.5 hidden sm:table-cell">
                     <span className="text-sm text-gray-500">
                       {u.created_at ? new Date(u.created_at).toLocaleDateString('he-IL') : '—'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3.5 hidden md:table-cell">
-                    <span className="text-sm text-gray-500">
-                      {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString('he-IL') : 'טרם נכנס'}
                     </span>
                   </td>
                   <td className="px-4 py-3.5">
@@ -226,7 +210,7 @@ export default function UsersPage() {
         onClose={() => setConfirm({ open: false, id: null, email: '' })}
         onConfirm={handleDelete}
         title="מחיקת משתמש"
-        message={`האם אתה בטוח שברצונך למחוק את המשתמש ${confirm.email}? הם לא יוכלו להיכנס יותר.`}
+        message={`האם אתה בטוח שברצונך למחוק את המשתמש ${confirm.email}?`}
         loading={deleting}
       />
     </div>
