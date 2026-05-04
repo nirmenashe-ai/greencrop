@@ -4,13 +4,13 @@ import { supabase, isConfigured } from '../../lib/supabase'
 import StatusMessage from '../common/StatusMessage'
 
 function LastValue({ data }) {
-  if (!data) return <p className="text-xs text-gray-400 italic">No previous record found.</p>
+  if (!data) return <p className="text-xs text-gray-400 italic">לא נמצאה רשומה קודמת.</p>
   return (
     <div className="space-y-1 text-sm">
-      <Row label="Harvest date" value={data.harvest_date} />
-      <Row label="Production date" value={data.production_date} />
-      <Row label="Weight (kg)" value={data.weight_kg ? `${data.weight_kg} kg` : null} />
-      <Row label="Disinfection" value={data.disinfection_boolean ? `Yes — ${data.disinfection_type || 'unspecified'}` : 'No'} />
+      <Row label="תאריך קטיף" value={data.harvest_date} />
+      <Row label="תאריך ייצור" value={data.production_date} />
+      <Row label='משקל (ק"ג)' value={data.weight_kg ? `${data.weight_kg} ק"ג` : null} />
+      <Row label="חיטוי" value={data.disinfection_boolean ? `כן — ${data.disinfection_type || 'לא צוין'}` : 'לא'} />
     </div>
   )
 }
@@ -65,7 +65,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
         await new Promise((r) => setTimeout(r, 600))
         setLastValue({ ...form })
         setForm(DEFAULT_FORM)
-        setStatus({ type: 'success', message: 'Entry logged (demo mode — not persisted).' })
+        setStatus({ type: 'success', message: 'רשומה נרשמה (מצב הדגמה).' })
         return
       }
       const { error } = await supabase.from('yield_logs').insert({
@@ -80,9 +80,9 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
       if (error) throw error
       setLastValue({ ...form })
       setForm(DEFAULT_FORM)
-      setStatus({ type: 'success', message: 'Yield record saved.' })
+      setStatus({ type: 'success', message: 'רשומת היבול נשמרה.' })
     } catch (err) {
-      setStatus({ type: 'error', message: err.message || 'Failed to save.' })
+      setStatus({ type: 'error', message: err.message || 'שגיאה בשמירה.' })
     } finally {
       setSubmitting(false)
     }
@@ -91,17 +91,17 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
   return (
     <div className="p-5 space-y-5">
       <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
-        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">Last Recorded</p>
-        {loadingLast ? <p className="text-xs text-gray-400">Loading…</p> : <LastValue data={lastValue} />}
+        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">רשומה אחרונה</p>
+        {loadingLast ? <p className="text-xs text-gray-400">טוען...</p> : <LastValue data={lastValue} />}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Log New Entry</p>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">רשומה חדשה</p>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Harvest Date <span className="text-red-500">*</span>
+              תאריך קטיף <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -112,7 +112,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Production Date</label>
+            <label className="block text-xs font-medium text-gray-600 mb-1">תאריך ייצור</label>
             <input
               type="date"
               value={form.production_date}
@@ -124,7 +124,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
 
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            Weight (kg) <span className="text-red-500">*</span>
+            משקל (ק"ג) <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -134,7 +134,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
             value={form.weight_kg}
             onChange={(e) => set('weight_kg', e.target.value)}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="e.g. 250.5"
+            placeholder="לדוגמה 250.5"
           />
         </div>
 
@@ -146,7 +146,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
               onChange={(e) => set('disinfection_boolean', e.target.checked)}
               className="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
             />
-            <span className="text-sm text-gray-700">Disinfection applied</span>
+            <span className="text-sm text-gray-700">בוצע חיטוי</span>
           </label>
           {form.disinfection_boolean && (
             <input
@@ -154,7 +154,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
               value={form.disinfection_type}
               onChange={(e) => set('disinfection_type', e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Disinfection type/product…"
+              placeholder="סוג/מוצר חיטוי..."
             />
           )}
         </div>
@@ -167,7 +167,7 @@ export default function YieldForm({ greenhouse, seasonSetup }) {
           className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
         >
           {submitting ? <Loader2 size={16} className="animate-spin" /> : <Package size={16} />}
-          {submitting ? 'Saving…' : 'Log Yield'}
+          {submitting ? 'שומר...' : 'רשום יבול'}
         </button>
       </form>
     </div>

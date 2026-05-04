@@ -5,14 +5,14 @@ import { DEMO_EMPLOYEES } from '../../data/demoData'
 import StatusMessage from '../common/StatusMessage'
 
 function LastValue({ data, employees }) {
-  if (!data) return <p className="text-xs text-gray-400 italic">No previous record found.</p>
+  if (!data) return <p className="text-xs text-gray-400 italic">לא נמצאה רשומה קודמת.</p>
   const emp = employees.find((e) => e.id === data.employee_id)
   return (
     <div className="space-y-1 text-sm">
-      <Row label="Opening #" value={data.opening_num} />
-      <Row label="Date" value={data.date} />
-      <Row label="Pollen type" value={data.pollen_type} />
-      <Row label="Employee" value={emp ? `${emp.first_name} ${emp.last_name}` : null} />
+      <Row label="פתח #" value={data.opening_num} />
+      <Row label="תאריך" value={data.date} />
+      <Row label="סוג אבקה" value={data.pollen_type} />
+      <Row label="עובד" value={emp ? `${emp.first_name} ${emp.last_name}` : null} />
     </div>
   )
 }
@@ -71,9 +71,9 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
 
   const validateOpening = (val) => {
     const n = parseInt(val)
-    if (isNaN(n)) { setOpeningError('Must be a number.'); return false }
+    if (isNaN(n)) { setOpeningError('חייב להיות מספר.'); return false }
     if (n < start_opening || n > end_opening) {
-      setOpeningError(`Must be between ${start_opening} and ${end_opening}.`)
+      setOpeningError(`חייב להיות בין ${start_opening} ל-${end_opening}.`)
       return false
     }
     setOpeningError('')
@@ -90,7 +90,7 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
         await new Promise((r) => setTimeout(r, 600))
         setLastValue({ ...form })
         setForm(DEFAULT_FORM)
-        setStatus({ type: 'success', message: 'Entry logged (demo mode — not persisted).' })
+        setStatus({ type: 'success', message: 'רשומה נרשמה (מצב הדגמה).' })
         return
       }
       const { error } = await supabase.from('fertilization_logs').insert({
@@ -104,9 +104,9 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
       if (error) throw error
       setLastValue({ ...form })
       setForm(DEFAULT_FORM)
-      setStatus({ type: 'success', message: 'Fertilization record saved.' })
+      setStatus({ type: 'success', message: 'רשומת ההאבקה נשמרה.' })
     } catch (err) {
-      setStatus({ type: 'error', message: err.message || 'Failed to save.' })
+      setStatus({ type: 'error', message: err.message || 'שגיאה בשמירה.' })
     } finally {
       setSubmitting(false)
     }
@@ -115,17 +115,17 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
   return (
     <div className="p-5 space-y-5">
       <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
-        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">Last Recorded</p>
-        {loadingLast ? <p className="text-xs text-gray-400">Loading…</p> : <LastValue data={lastValue} employees={employees} />}
+        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">רשומה אחרונה</p>
+        {loadingLast ? <p className="text-xs text-gray-400">טוען...</p> : <LastValue data={lastValue} employees={employees} />}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Log New Entry</p>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">רשומה חדשה</p>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Opening # <span className="text-red-500">*</span>
+              פתח # <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
@@ -139,12 +139,12 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
             />
             {openingError
               ? <p className="text-xs text-red-500 mt-1">{openingError}</p>
-              : <p className="text-xs text-gray-400 mt-1">Valid: {start_opening} – {end_opening}</p>
+              : <p className="text-xs text-gray-400 mt-1">תקף: {start_opening} – {end_opening}</p>
             }
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Date <span className="text-red-500">*</span>
+              תאריך <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -158,7 +158,7 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
 
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            Pollen Type <span className="text-red-500">*</span>
+            סוג אבקה <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -166,13 +166,13 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
             value={form.pollen_type}
             onChange={(e) => set('pollen_type', e.target.value)}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="e.g. Bumblebee, Artificial"
+            placeholder="לדוגמה: דבורים, מלאכותי"
           />
         </div>
 
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            Employee <span className="text-red-500">*</span>
+            עובד <span className="text-red-500">*</span>
           </label>
           <select
             required
@@ -180,7 +180,7 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
             onChange={(e) => set('employee_id', e.target.value)}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
           >
-            <option value="">Select employee…</option>
+            <option value="">בחר עובד...</option>
             {employees.map((emp) => (
               <option key={emp.id} value={emp.id}>
                 {emp.first_name} {emp.last_name}
@@ -197,7 +197,7 @@ export default function FertilizationForm({ greenhouse, seasonSetup }) {
           className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
         >
           {submitting ? <Loader2 size={16} className="animate-spin" /> : <Flower size={16} />}
-          {submitting ? 'Saving…' : 'Log Fertilization'}
+          {submitting ? 'שומר...' : 'רשום האבקה'}
         </button>
       </form>
     </div>

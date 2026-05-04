@@ -8,10 +8,10 @@ import YieldForm from '../forms/YieldForm'
 import { getCropColor } from '../../utils/cropColors'
 
 const TABS = [
-  { id: 'irrigation', label: 'Irrigation', Icon: Droplets },
-  { id: 'spraying', label: 'Spraying', Icon: Wind },
-  { id: 'fertilization', label: 'Fertilization', Icon: Flower },
-  { id: 'yield', label: 'Yield', Icon: Package },
+  { id: 'irrigation', label: 'השקיה', Icon: Droplets },
+  { id: 'spraying', label: 'ריסוס', Icon: Wind },
+  { id: 'fertilization', label: 'האבקה', Icon: Flower },
+  { id: 'yield', label: 'יבול', Icon: Package },
 ]
 
 export default function ActionModal({ isOpen, onClose, greenhouse, seasonSetup }) {
@@ -23,7 +23,7 @@ export default function ActionModal({ isOpen, onClose, greenhouse, seasonSetup }
   const openingCount = seasonSetup.end_opening - seasonSetup.start_opening + 1
   const areaDunam = ((openingCount * 8 * 48) / 1000).toFixed(2)
 
-  const subtitle = `${seasonSetup.crop_name} · Openings ${seasonSetup.start_opening}–${seasonSetup.end_opening} · ${areaDunam} dunam`
+  const subtitle = `${seasonSetup.crop_name} · פתחים ${seasonSetup.start_opening}–${seasonSetup.end_opening} · ${areaDunam} דונם`
 
   return (
     <Modal
@@ -44,7 +44,7 @@ export default function ActionModal({ isOpen, onClose, greenhouse, seasonSetup }
           <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color.border }} />
           {seasonSetup.crop_name}
         </span>
-        <span className="text-xs text-gray-500">{openingCount} openings · {openingCount * 8}m wide</span>
+        <span className="text-xs text-gray-500">{openingCount} פתחים · {openingCount * 8}מ רוחב</span>
       </div>
 
       <div className="flex border-b border-gray-100 overflow-x-auto">

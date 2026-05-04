@@ -3,10 +3,10 @@ import { useAuth } from '../../context/AuthContext'
 import { useLocation } from 'react-router-dom'
 
 const PAGE_TITLES = {
-  '/': 'Dashboard',
-  '/admin/season-setup': 'Season Setup',
-  '/admin/employees': 'Employees',
-  '/admin/spray-types': 'Spray Types',
+  '/': 'לוח בקרה',
+  '/admin/season-setup': 'הגדרת עונה',
+  '/admin/employees': 'עובדים',
+  '/admin/spray-types': 'סוגי ריסוס',
 }
 
 export default function Header({ onMenuClick }) {
@@ -27,7 +27,7 @@ export default function Header({ onMenuClick }) {
         {isDemo && (
           <span className="hidden sm:flex items-center gap-1.5 text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200 rounded-full px-2.5 py-0.5">
             <FlaskConical size={12} />
-            Demo Mode
+            מצב הדגמה
           </span>
         )}
       </div>
@@ -35,7 +35,7 @@ export default function Header({ onMenuClick }) {
       <div className="flex items-center gap-3">
         <div className="hidden sm:block text-right">
           <p className="text-xs font-medium text-gray-700">{user?.email}</p>
-          {isDemo && <p className="text-xs text-gray-400">No Supabase connected</p>}
+          {isDemo && <p className="text-xs text-gray-400">Supabase לא מחובר</p>}
         </div>
         <div className="w-8 h-8 rounded-full bg-green-100 border-2 border-green-300 flex items-center justify-center">
           <span className="text-xs font-bold text-green-700">

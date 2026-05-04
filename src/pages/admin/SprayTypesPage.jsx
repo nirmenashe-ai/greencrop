@@ -14,20 +14,20 @@ function SprayTypeForm({ initial, onSave, onCancel, saving, error }) {
     <div className="p-5 space-y-4">
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">
-          Spray Type Name <span className="text-red-500">*</span>
+          שם סוג ריסוס <span className="text-red-500">*</span>
         </label>
         <input
           autoFocus
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          placeholder="e.g. Pesticide A, Fungicide B"
+          placeholder="לדוגמה: חומר הדברה, קוטל פטריות"
         />
       </div>
       {error && <StatusMessage type="error" message={error} />}
       <div className="flex gap-3 pt-2">
         <button onClick={onCancel} className="flex-1 py-2.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-          Cancel
+          ביטול
         </button>
         <button
           onClick={() => name.trim() && onSave({ name: name.trim() })}
@@ -35,7 +35,7 @@ function SprayTypeForm({ initial, onSave, onCancel, saving, error }) {
           className="flex-1 py-2.5 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {saving && <Loader2 size={14} className="animate-spin" />}
-          {initial ? 'Update' : 'Add Type'}
+          {initial ? 'עדכן' : 'הוסף סוג'}
         </button>
       </div>
     </div>
@@ -118,14 +118,14 @@ export default function SprayTypesPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Tag size={20} className="text-green-600" />
-          <h2 className="text-lg font-bold text-gray-800">Spray Types</h2>
+          <h2 className="text-lg font-bold text-gray-800">סוגי ריסוס</h2>
           <span className="text-sm text-gray-400">({types.length})</span>
         </div>
         <button
           onClick={openAdd}
           className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-colors"
         >
-          <Plus size={16} /> Add Type
+          <Plus size={16} /> הוסף סוג
         </button>
       </div>
 
@@ -134,7 +134,7 @@ export default function SprayTypesPage() {
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search types…"
+          placeholder="חיפוש סוגים..."
           className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
         />
       </div>
@@ -145,14 +145,14 @@ export default function SprayTypesPage() {
         ) : filtered.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <Tag size={40} className="mx-auto mb-3 opacity-30" />
-            <p className="text-sm">{search ? 'No types match your search.' : 'No spray types yet.'}</p>
+            <p className="text-sm">{search ? 'לא נמצאו סוגים התואמים לחיפוש.' : 'אין סוגי ריסוס עדיין.'}</p>
           </div>
         ) : (
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">שם</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">פעולות</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -189,7 +189,7 @@ export default function SprayTypesPage() {
         )}
       </div>
 
-      <Modal isOpen={modal.open} onClose={closeModal} title={modal.type ? 'Edit Spray Type' : 'Add Spray Type'} maxWidth="max-w-sm">
+      <Modal isOpen={modal.open} onClose={closeModal} title={modal.type ? 'עריכת סוג ריסוס' : 'הוספת סוג ריסוס'} maxWidth="max-w-sm">
         <SprayTypeForm initial={modal.type} onSave={handleSave} onCancel={closeModal} saving={saving} error={formError} />
       </Modal>
 
@@ -197,8 +197,8 @@ export default function SprayTypesPage() {
         isOpen={confirm.open}
         onClose={() => setConfirm({ open: false, id: null })}
         onConfirm={handleDelete}
-        title="Delete Spray Type"
-        message="Are you sure you want to delete this spray type? Existing spray logs referencing it will be affected."
+        title="מחיקת סוג ריסוס"
+        message="האם אתה בטוח שברצונך למחוק סוג ריסוס זה? רשומות ריסוס קיימות יושפעו."
         loading={deleting}
       />
     </div>

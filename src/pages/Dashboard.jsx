@@ -20,7 +20,7 @@ function StatCard({ icon: Icon, label, value, color = 'text-green-600', bg = 'bg
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ greenhouses: 0, crops: 0, area: 0 })
-  const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const today = new Date().toLocaleDateString('he-IL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 
   useEffect(() => {
     if (!isConfigured) {
@@ -45,24 +45,24 @@ export default function Dashboard() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Farm Overview</h2>
+          <h2 className="text-xl font-bold text-gray-900">סקירת המשק</h2>
           <p className="text-sm text-gray-500 mt-0.5">{today}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard icon={Layers} label="Greenhouses" value={stats.greenhouses} />
-        <StatCard icon={Sprout} label="Active Crops" value={stats.crops} color="text-emerald-600" bg="bg-emerald-50" />
+        <StatCard icon={Layers} label="חממות" value={stats.greenhouses} />
+        <StatCard icon={Sprout} label="גידולים פעילים" value={stats.crops} color="text-emerald-600" bg="bg-emerald-50" />
         <StatCard
           icon={AreaChart}
-          label="Total Area"
-          value={`${(stats.area / 1000).toFixed(1)} dun`}
+          label="שטח כולל"
+          value={`${(stats.area / 1000).toFixed(1)} דונם`}
           color="text-blue-600"
           bg="bg-blue-50"
         />
         <StatCard
           icon={CalendarDays}
-          label="Season"
+          label="עונה"
           value={new Date().getFullYear()}
           color="text-purple-600"
           bg="bg-purple-50"
@@ -71,8 +71,8 @@ export default function Dashboard() {
 
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Greenhouse Map</h3>
-          <span className="text-xs text-gray-400">· Click any crop section to log activity</span>
+          <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">מפת חממות</h3>
+          <span className="text-xs text-gray-400">· לחץ על כל גוש גידול לרישום פעילות</span>
         </div>
         <GreenhouseMap />
       </div>

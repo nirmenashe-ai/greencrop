@@ -26,12 +26,12 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
     if (!selectedGh) return true
     const start = parseInt(form.start_opening)
     const end = parseInt(form.end_opening)
-    if (isNaN(start) || isNaN(end)) { setRangeError('Please enter valid opening numbers.'); return false }
+    if (isNaN(start) || isNaN(end)) { setRangeError('נא להזין מספרי פתחים תקפים.'); return false }
     if (start < 1 || end > selectedGh.total_openings) {
-      setRangeError(`Range must be between 1 and ${selectedGh.total_openings}.`)
+      setRangeError(`הטווח חייב להיות בין 1 ל-${selectedGh.total_openings}.`)
       return false
     }
-    if (start > end) { setRangeError('Start must be ≤ end.'); return false }
+    if (start > end) { setRangeError('הפתח ההתחלתי חייב להיות קטן מהסיום.'); return false }
     setRangeError('')
     return true
   }
@@ -51,36 +51,36 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
     <div className="p-5 space-y-4">
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">
-          Greenhouse <span className="text-red-500">*</span>
+          חממה <span className="text-red-500">*</span>
         </label>
         <select
           value={form.greenhouse_id}
           onChange={(e) => set('greenhouse_id', e.target.value)}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white"
         >
-          <option value="">Select greenhouse…</option>
+          <option value="">בחר חממה...</option>
           {greenhouses.map((g) => (
-            <option key={g.id} value={g.id}>{g.name} ({g.total_openings} openings)</option>
+            <option key={g.id} value={g.id}>{g.name} ({g.total_openings} פתחים)</option>
           ))}
         </select>
       </div>
 
       <div>
         <label className="block text-xs font-medium text-gray-600 mb-1">
-          Crop Name <span className="text-red-500">*</span>
+          שם גידול <span className="text-red-500">*</span>
         </label>
         <input
           value={form.crop_name}
           onChange={(e) => set('crop_name', e.target.value)}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          placeholder="e.g. Cucumbers, Peppers, Tomatoes"
+          placeholder="לדוגמה: מלפפונים, פלפלים, עגבניות"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-3">
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            Start Opening <span className="text-red-500">*</span>
+            פתח התחלה <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -94,7 +94,7 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            End Opening <span className="text-red-500">*</span>
+            פתח סיום <span className="text-red-500">*</span>
           </label>
           <input
             type="number"
@@ -108,7 +108,7 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
         </div>
       </div>
       {selectedGh && (
-        <p className="text-xs text-gray-400">Valid range: 1 – {selectedGh.total_openings}</p>
+        <p className="text-xs text-gray-400">טווח תקף: 1 – {selectedGh.total_openings}</p>
       )}
       {rangeError && <p className="text-xs text-red-500">{rangeError}</p>}
 
@@ -119,14 +119,14 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
           onChange={(e) => set('is_active', e.target.checked)}
           className="w-4 h-4 text-green-600 border-gray-300 rounded"
         />
-        <span className="text-sm text-gray-700">Active season</span>
+        <span className="text-sm text-gray-700">עונה פעילה</span>
       </label>
 
       {error && <StatusMessage type="error" message={error} />}
 
       <div className="flex gap-3 pt-2">
         <button onClick={onCancel} className="flex-1 py-2.5 text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-          Cancel
+          ביטול
         </button>
         <button
           onClick={handleSave}
@@ -134,7 +134,7 @@ function SetupForm({ initial, greenhouses, onSave, onCancel, saving, error }) {
           className="flex-1 py-2.5 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
         >
           {saving && <Loader2 size={14} className="animate-spin" />}
-          {initial ? 'Update' : 'Add Setup'}
+          {initial ? 'עדכן' : 'הוסף הגדרה'}
         </button>
       </div>
     </div>
@@ -235,14 +235,14 @@ export default function SeasonSetupPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CalendarDays size={20} className="text-green-600" />
-          <h2 className="text-lg font-bold text-gray-800">Season Setup</h2>
+          <h2 className="text-lg font-bold text-gray-800">הגדרת עונה</h2>
           <span className="text-sm text-gray-400">({setups.length})</span>
         </div>
         <button
           onClick={openAdd}
           className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition-colors"
         >
-          <Plus size={16} /> Add Setup
+          <Plus size={16} /> הוסף הגדרה
         </button>
       </div>
 
@@ -252,17 +252,17 @@ export default function SeasonSetupPage() {
         ) : setups.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <CalendarDays size={40} className="mx-auto mb-3 opacity-30" />
-            <p className="text-sm">No season setups yet. Add one to map crops to greenhouse openings.</p>
+            <p className="text-sm">אין הגדרות עונה עדיין. הוסף הגדרה לשיוך גידולים לפתחי החממה.</p>
           </div>
         ) : (
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100 bg-gray-50">
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Crop</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">Greenhouse</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">Openings</th>
-                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Active</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">Actions</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide">גידול</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide hidden sm:table-cell">חממה</th>
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wide hidden md:table-cell">פתחים</th>
+                <th className="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">פעיל</th>
+                <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">פעולות</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -315,7 +315,7 @@ export default function SeasonSetupPage() {
         )}
       </div>
 
-      <Modal isOpen={modal.open} onClose={closeModal} title={modal.setup ? 'Edit Season Setup' : 'Add Season Setup'} maxWidth="max-w-md">
+      <Modal isOpen={modal.open} onClose={closeModal} title={modal.setup ? 'עריכת הגדרת עונה' : 'הוספת הגדרת עונה'} maxWidth="max-w-md">
         <SetupForm initial={modal.setup} greenhouses={greenhouses} onSave={handleSave} onCancel={closeModal} saving={saving} error={formError} />
       </Modal>
 
@@ -323,8 +323,8 @@ export default function SeasonSetupPage() {
         isOpen={confirm.open}
         onClose={() => setConfirm({ open: false, id: null })}
         onConfirm={handleDelete}
-        title="Delete Season Setup"
-        message="Are you sure? All associated logs (irrigation, spraying, fertilization, yield) for this crop assignment will lose their reference."
+        title="מחיקת הגדרת עונה"
+        message="האם אתה בטוח? כל הרשומות המשויכות (השקיה, ריסוס, האבקה, יבול) לשיוך גידול זה יאבדו את הקישור שלהן."
         loading={deleting}
       />
     </div>

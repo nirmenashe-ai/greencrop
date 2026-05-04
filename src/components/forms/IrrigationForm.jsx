@@ -4,13 +4,13 @@ import { supabase, isConfigured } from '../../lib/supabase'
 import StatusMessage from '../common/StatusMessage'
 
 function LastValue({ data }) {
-  if (!data) return <p className="text-xs text-gray-400 italic">No previous record found.</p>
+  if (!data) return <p className="text-xs text-gray-400 italic">לא נמצאה רשומה קודמת.</p>
   return (
     <div className="space-y-1 text-sm">
-      <Row label="Volume" value={`${data.m3_per_dunam} m³/dunam`} />
-      <Row label="Cycles" value={data.cycles} />
-      <Row label="Start date" value={data.start_date} />
-      <Row label="End date" value={data.end_date} />
+      <Row label="נפח" value={`${data.m3_per_dunam} מ"ק/דונם`} />
+      <Row label="מחזורים" value={data.cycles} />
+      <Row label="תאריך התחלה" value={data.start_date} />
+      <Row label="תאריך סיום" value={data.end_date} />
     </div>
   )
 }
@@ -58,7 +58,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
         await new Promise((r) => setTimeout(r, 600))
         setLastValue({ ...form })
         setForm(DEFAULT_FORM)
-        setStatus({ type: 'success', message: 'Entry logged (demo mode — not persisted).' })
+        setStatus({ type: 'success', message: 'רשומה נרשמה (מצב הדגמה).' })
         return
       }
       const { error } = await supabase.from('irrigation_logs').insert({
@@ -72,9 +72,9 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
       if (error) throw error
       setLastValue({ ...form })
       setForm(DEFAULT_FORM)
-      setStatus({ type: 'success', message: 'Irrigation record saved.' })
+      setStatus({ type: 'success', message: 'רשומת ההשקיה נשמרה.' })
     } catch (err) {
-      setStatus({ type: 'error', message: err.message || 'Failed to save.' })
+      setStatus({ type: 'error', message: err.message || 'שגיאה בשמירה.' })
     } finally {
       setSubmitting(false)
     }
@@ -85,17 +85,17 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
   return (
     <div className="p-5 space-y-5">
       <div className="p-3.5 bg-amber-50 border border-amber-200 rounded-xl">
-        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">Last Recorded</p>
-        {loadingLast ? <p className="text-xs text-gray-400">Loading…</p> : <LastValue data={lastValue} />}
+        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2.5">רשומה אחרונה</p>
+        {loadingLast ? <p className="text-xs text-gray-400">טוען...</p> : <LastValue data={lastValue} />}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Log New Entry</p>
+        <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">רשומה חדשה</p>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Volume (m³/dunam) <span className="text-red-500">*</span>
+              נפח (מ"ק/דונם) <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
@@ -105,12 +105,12 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
               value={form.m3_per_dunam}
               onChange={(e) => set('m3_per_dunam', e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="e.g. 15.5"
+              placeholder="לדוגמה 15.5"
             />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Cycles <span className="text-red-500">*</span>
+              מחזורים <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
@@ -119,7 +119,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
               value={form.cycles}
               onChange={(e) => set('cycles', e.target.value)}
               className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              placeholder="e.g. 3"
+              placeholder="לדוגמה 3"
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              Start Date <span className="text-red-500">*</span>
+              תאריך התחלה <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -139,7 +139,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">
-              End Date <span className="text-red-500">*</span>
+              תאריך סיום <span className="text-red-500">*</span>
             </label>
             <input
               type="date"
@@ -154,7 +154,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
 
         {form.m3_per_dunam && (
           <p className="text-xs text-gray-400">
-            Estimated total: {(parseFloat(form.m3_per_dunam) * dunamArea).toFixed(1)} m³ for {dunamArea.toFixed(2)} dunam
+            כמות משוערת: {(parseFloat(form.m3_per_dunam) * dunamArea).toFixed(1)} מ"ק עבור {dunamArea.toFixed(2)} דונם
           </p>
         )}
 
@@ -166,7 +166,7 @@ export default function IrrigationForm({ greenhouse, seasonSetup }) {
           className="w-full flex items-center justify-center gap-2 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
         >
           {submitting ? <Loader2 size={16} className="animate-spin" /> : <Droplets size={16} />}
-          {submitting ? 'Saving…' : 'Log Irrigation'}
+          {submitting ? 'שומר...' : 'רשום השקיה'}
         </button>
       </form>
     </div>

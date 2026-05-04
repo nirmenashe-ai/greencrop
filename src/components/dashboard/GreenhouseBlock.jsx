@@ -26,7 +26,7 @@ export default function GreenhouseBlock({ greenhouse, seasonSetups, onOpeningCli
         </div>
         <div className="text-right">
           <p className="text-xs text-gray-500">
-            {greenhouse.total_openings} openings · {(totalArea / 1000).toFixed(1)} dunam
+            {greenhouse.total_openings} פתחים · {(totalArea / 1000).toFixed(1)} דונם
           </p>
         </div>
       </div>
@@ -67,7 +67,7 @@ export default function GreenhouseBlock({ greenhouse, seasonSetups, onOpeningCli
                 key={num}
                 onClick={() => setup && onOpeningClick(greenhouse, setup)}
                 disabled={!setup}
-                title={setup ? `${setup.crop_name} — Click to log activity` : `Opening ${num} — Not configured`}
+                title={setup ? `${setup.crop_name} — לחץ לרישום פעילות` : `פתח ${num} — לא מוגדר`}
                 className={`rounded-lg p-1.5 text-center transition-all duration-150 min-h-[44px] flex flex-col items-center justify-center ${
                   setup
                     ? 'cursor-pointer hover:scale-105 active:scale-95 shadow-sm hover:shadow-md'

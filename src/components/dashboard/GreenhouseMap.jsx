@@ -59,7 +59,7 @@ export default function GreenhouseMap() {
       <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
         <AlertCircle size={18} />
         <div>
-          <p className="text-sm font-medium">Failed to load greenhouse data</p>
+          <p className="text-sm font-medium">שגיאה בטעינת נתוני החממה</p>
           <p className="text-xs mt-0.5">{error}</p>
         </div>
       </div>
