@@ -10,7 +10,7 @@ const PALETTE = [
   { bg: '#d1fae5', border: '#059669', text: '#064e3b', light: '#ecfdf5' },
 ]
 
-const EMPTY_COLOR = { bg: '#f3f4f6', border: '#d1d5db', text: '#9ca3af', light: '#f9fafb' }
+const EMPTY_COLOR = { bg: '#e5e7eb', border: '#9ca3af', text: '#6b7280', light: '#f3f4f6' }
 
 const cache = {}
 

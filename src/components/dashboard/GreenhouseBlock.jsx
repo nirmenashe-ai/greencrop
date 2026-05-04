@@ -68,10 +68,10 @@ export default function GreenhouseBlock({ greenhouse, seasonSetups, onOpeningCli
                 onClick={() => setup && onOpeningClick(greenhouse, setup)}
                 disabled={!setup}
                 title={setup ? `${setup.crop_name} — לחץ לרישום פעילות` : `פתח ${num} — לא מוגדר`}
-                className={`rounded-lg p-1.5 text-center transition-all duration-150 min-h-[44px] flex flex-col items-center justify-center ${
+                className={`rounded-lg p-2 text-center transition-all duration-150 min-h-[68px] flex flex-col items-center justify-center gap-1 ${
                   setup
                     ? 'cursor-pointer hover:scale-105 active:scale-95 shadow-sm hover:shadow-md'
-                    : 'cursor-default opacity-60'
+                    : 'cursor-default'
                 }`}
                 style={{
                   backgroundColor: color.bg,
@@ -79,18 +79,20 @@ export default function GreenhouseBlock({ greenhouse, seasonSetups, onOpeningCli
                 }}
               >
                 <span
-                  className="text-[11px] font-bold leading-none"
+                  className="text-xs font-bold leading-none"
                   style={{ color: color.text }}
                 >
                   {num}
                 </span>
-                {setup && (
+                {setup ? (
                   <span
-                    className="text-[9px] leading-tight mt-0.5 max-w-full truncate px-0.5"
+                    className="text-[10px] leading-tight max-w-full truncate px-0.5 font-medium"
                     style={{ color: color.text }}
                   >
                     {setup.crop_name}
                   </span>
+                ) : (
+                  <span className="text-[9px] text-gray-400">ריק</span>
                 )}
               </button>
             )

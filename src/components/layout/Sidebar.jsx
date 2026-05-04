@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Users, Tag, CalendarDays, Sprout, X, ChevronLeft } from 'lucide-react'
+import { LayoutDashboard, Users, Tag, CalendarDays, Sprout, X, ChevronLeft, UserCog } from 'lucide-react'
 
 const NAV = [
   { to: '/', label: 'לוח בקרה', Icon: LayoutDashboard, end: true },
@@ -9,6 +9,7 @@ const ADMIN_NAV = [
   { to: '/admin/season-setup', label: 'הגדרת עונה', Icon: CalendarDays },
   { to: '/admin/employees', label: 'עובדים', Icon: Users },
   { to: '/admin/spray-types', label: 'סוגי ריסוס', Icon: Tag },
+  { to: '/admin/users', label: 'משתמשי מערכת', Icon: UserCog },
 ]
 
 function NavItem({ to, label, Icon, end, onClick }) {

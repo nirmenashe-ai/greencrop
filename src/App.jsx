@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard'
 import EmployeesPage from './pages/admin/EmployeesPage'
 import SprayTypesPage from './pages/admin/SprayTypesPage'
 import SeasonSetupPage from './pages/admin/SeasonSetupPage'
+import UsersPage from './pages/admin/UsersPage'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -43,6 +44,7 @@ function AppRoutes() {
         <Route path="admin/employees" element={<EmployeesPage />} />
         <Route path="admin/spray-types" element={<SprayTypesPage />} />
         <Route path="admin/season-setup" element={<SeasonSetupPage />} />
+        <Route path="admin/users" element={<UsersPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
